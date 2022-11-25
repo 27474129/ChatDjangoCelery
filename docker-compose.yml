@@ -13,10 +13,38 @@ services:
     command: bash -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
 
     depends_on:
+      - redis
       - postgres
       - adminer
     links:
+      - redis
       - postgres:postgres
+    networks:
+      - projectnetwork
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - projectnetwork
+
+  celery_worker:
+    container_name: celery_worker
+    restart: always
+    build:
+      context: .
+    command: ["celery", "-A", "payment", "worker", "-l", "info"]
+    links:
+      - redis
+      - postgres:postgres
+    depends_on:
+      - app
+    volumes:
+      - .:/sources/
     networks:
       - projectnetwork
 
