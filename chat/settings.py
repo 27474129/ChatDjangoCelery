@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from . import config
 
@@ -34,7 +35,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'payment.urls'
+ROOT_URLCONF = 'chat.urls'
 
 TEMPLATES = [
     {
@@ -52,7 +53,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'payment.wsgi.application'
+WSGI_APPLICATION = 'chat.wsgi.application'
 
 
 DATABASES = {
@@ -133,7 +134,9 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
-
+STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

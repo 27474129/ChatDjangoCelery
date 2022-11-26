@@ -1,0 +1,89 @@
+{% load static %}
+{% load core_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 10vh;
+    }
+    a, a:visited {
+        color: #000;
+        transition: .3s;
+        font-size: 30px;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #000;
+    }
+    .logout {
+        color: rgb(243, 129, 129);
+    }
+    .login {
+        font-size: 30px;
+        color: rgb(149, 225, 211);
+    }
+</style>
+<body>
+    {% if request.session.keys %}
+        <div><a class="logout" href="{% url 'logout' %}">Выйти</a></div>
+        <div>
+            {% for message in messages %}
+                <div>Sent by: {{ message.who_sent|get_username_by_id }}</div>
+                message: {{ message.message }}
+            {% endfor %}
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Send</button>
+        </form>
+    {% else %}
+        <div>Чтобы общаться, нужно войти</div>
+        <div><a class="login" href="{% url 'auth' %}">Войти</a></div>
+    {% endif %}
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script>
+
+    $('textarea')
+        .keypress(function() {
+            this.style.height = (this.scrollHeight) + 'px';
+        })
+        .keyup(function() {
+            this.style.height = (this.scrollHeight) + 'px';
+        })
+    $('.login').click(function() {
+        location.reload(true);
+    })
+    var sessionUserId
+    $('form button').click(function() {
+        sessionUserId = Cookies.get('session.user_id');
+
+        var textareaValue = $('textarea').val()
+    })
+
+    $.ajax({
+            url: '',
+            type: 'POST',
+            data: ({login: 'asd'}),
+            dataType: 'text',
+            beforeSend: function() {
+                console.log('waiting...');
+            },
+            success: function(data) {
+
+            }
+        });
+
+</script>
+
+</html>

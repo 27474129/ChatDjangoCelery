@@ -1,14 +1,37 @@
 version: "3"
 
 services:
+  web:
+    container_name: nginx
+    image: nginx
+    restart: always
+    expose:
+      - 7001
+    ports:
+      - "8070:7001"
+    depends_on:
+      - app
+      - celery_worker
+    volumes:
+      - ./media:/media
+    networks:
+      - projectnetwork
+
   app:
     container_name: app
     build:
       context: .
+
+    expose:
+      - 8000
     ports:
       - "8000:8000"
     volumes:
       - .:/sources/
+      - ./media:/media
+
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=27474129
 
     command: bash -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
 
@@ -21,6 +44,7 @@ services:
       - postgres:postgres
     networks:
       - projectnetwork
+
 
   redis:
     container_name: redis
@@ -37,7 +61,7 @@ services:
     restart: always
     build:
       context: .
-    command: ["celery", "-A", "payment", "worker", "-l", "info"]
+    command: ["celery", "-A", "chat", "worker", "-l", "info"]
     links:
       - redis
       - postgres:postgres

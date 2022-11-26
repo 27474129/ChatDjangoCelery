@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal messages</title>
+</head>
+<body>
+    {% if not is_empty %}
+        <div>
+            {% for personal_message in personal_messages %}
+                <span>От кого: admin</span>
+                <div>{{ personal_message.message }}</div>
+                <div><img style="height: 100px; width: 100px" src="../../../media/{{ personal_message.image }}"><br></div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1>У вас нет сообщений!</h1>
+    {% endif %}
+</body>
+</html>
